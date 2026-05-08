@@ -31,5 +31,13 @@ export default async function Navbar() {
     }
   }
 
-  return <NavbarClient userId={user?.id ?? null} userEmail={user?.email ?? null} unreadCount={unreadCount} />
+  let isAdmin = false
+  if (user) {
+    try {
+      const { data: prof } = await supabase.from('profiles').select('is_admin').eq('id', user.id).single()
+      isAdmin = Boolean(prof?.is_admin)
+    } catch {}
+  }
+
+  return <NavbarClient userId={user?.id ?? null} userEmail={user?.email ?? null} unreadCount={unreadCount} isAdmin={isAdmin} />
 }

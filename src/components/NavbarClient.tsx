@@ -16,10 +16,12 @@ export default function NavbarClient({
   userId,
   userEmail,
   unreadCount,
+  isAdmin = false,
 }: {
   userId: string | null
   userEmail: string | null
   unreadCount: number
+  isAdmin?: boolean
 }) {
   const { t } = useLanguage()
   const pathname = usePathname()
@@ -48,9 +50,14 @@ export default function NavbarClient({
               <Link href="/profile" className="hidden sm:block text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors">
                 {t.nav.profile}
               </Link>
+              {isAdmin && (
+                <Link href="/admin/verifications" className="hidden sm:block text-xs font-bold text-amber-600 hover:text-amber-700 transition-colors border border-amber-200 rounded-lg px-2.5 py-1 bg-amber-50 hover:bg-amber-100">
+                  Admin
+                </Link>
+              )}
               <RequestBell userId={userId} messageUnreadCount={unreadCount} />
               <LogoutButton />
-              <MobileNavSheet key={pathname} userEmail={userEmail} unreadCount={unreadCount} />
+              <MobileNavSheet key={pathname} userEmail={userEmail} unreadCount={unreadCount} isAdmin={isAdmin} />
               <div className="hidden sm:flex h-9 w-9 items-center justify-center rounded-full text-white text-sm font-bold shadow-sm" style={{ background: 'linear-gradient(135deg,#1E3A8A,#38BDF8)' }}>
                 {userEmail?.[0].toUpperCase()}
               </div>
@@ -84,7 +91,8 @@ export default function NavbarClient({
           <div className="hidden sm:block">
             <ThemeToggle />
           </div>
-          <div className="hidden sm:block">
+          {/* Logged-out: show language picker on mobile too (no hamburger menu for them) */}
+          <div className={isLoggedIn ? 'hidden sm:block' : 'block'}>
             <LanguageSwitcher />
           </div>
         </div>

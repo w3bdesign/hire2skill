@@ -226,6 +226,99 @@ function TextInput({ value, onChange, placeholder, readOnly, type = 'text' }: {
   )
 }
 
+// ── Profile completeness bar ──────────────────────────────────────────────────
+
+function getCompletenessUi(locale: 'no' | 'en' | 'da' | 'sv') {
+  if (locale === 'no') return {
+    title: 'Profilstyrke',
+    missing: 'Mangler',
+    items: {
+      name: 'Visningsnavn', avatar: 'Profilbilde', bio: 'Bio', rate: 'Timepris',
+      categories: 'Tjenestekategorier', location: 'Sted', phone: 'Telefonnummer',
+    },
+  }
+  if (locale === 'da') return {
+    title: 'Profilstyrke',
+    missing: 'Mangler',
+    items: {
+      name: 'Visningsnavn', avatar: 'Profilbillede', bio: 'Bio', rate: 'Timepris',
+      categories: 'Servicekategorier', location: 'Placering', phone: 'Telefonnummer',
+    },
+  }
+  if (locale === 'sv') return {
+    title: 'Profilstyrka',
+    missing: 'Saknas',
+    items: {
+      name: 'Visningsnamn', avatar: 'Profilbild', bio: 'Bio', rate: 'Timpris',
+      categories: 'Tjänstekategorier', location: 'Plats', phone: 'Telefonnummer',
+    },
+  }
+  return {
+    title: 'Profile completeness',
+    missing: 'Missing',
+    items: {
+      name: 'Display name', avatar: 'Profile photo', bio: 'Bio (min 30 chars)', rate: 'Hourly rate',
+      categories: 'Service categories', location: 'Location', phone: 'Phone number',
+    },
+  }
+}
+
+function ProfileCompletenessBar({ name, bio, rate, cats, avatar, location, phone, role }: {
+  name: string; bio: string; rate: string; cats: string[]; avatar: string | null
+  location: string; phone: string; role: RoleType
+}) {
+  const { locale } = useLanguage()
+  const ui = getCompletenessUi(locale)
+
+  const items = role === 'helper'
+    ? [
+        { key: 'name' as const,       done: name.trim() !== '' },
+        { key: 'avatar' as const,     done: avatar !== null },
+        { key: 'bio' as const,        done: bio.trim().length >= 30 },
+        { key: 'rate' as const,       done: Number(rate) > 0 },
+        { key: 'categories' as const, done: cats.length > 0 },
+        { key: 'location' as const,   done: location.trim() !== '' },
+        { key: 'phone' as const,      done: phone.trim() !== '' },
+      ]
+    : [
+        { key: 'name' as const,     done: name.trim() !== '' },
+        { key: 'avatar' as const,   done: avatar !== null },
+        { key: 'location' as const, done: location.trim() !== '' },
+      ]
+
+  const doneCount = items.filter(i => i.done).length
+  const pct = Math.round((doneCount / items.length) * 100)
+  const missing = items.filter(i => !i.done)
+
+  if (pct === 100) return null
+
+  const barColor = pct >= 80 ? '#16A34A' : pct >= 50 ? '#2563EB' : pct >= 30 ? '#F59E0B' : '#EF4444'
+  const bgColor  = pct >= 80 ? '#F0FDF4' : pct >= 50 ? '#EFF6FF' : pct >= 30 ? '#FFFBEB' : '#FEF2F2'
+  const bdColor  = pct >= 80 ? '#BBF7D0' : pct >= 50 ? '#BFDBFE' : pct >= 30 ? '#FDE68A' : '#FECACA'
+
+  return (
+    <div className="mb-6 rounded-2xl p-4 space-y-3" style={{ background: bgColor, border: `1px solid ${bdColor}` }}>
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-sm font-bold text-gray-900">{ui.title}</p>
+        <span className="text-sm font-extrabold tabular-nums" style={{ color: barColor }}>{pct}%</span>
+      </div>
+      <div className="h-2 w-full overflow-hidden rounded-full bg-white/60">
+        <div className="h-full rounded-full transition-all duration-500" style={{ width: `${pct}%`, background: barColor }} />
+      </div>
+      {missing.length > 0 && (
+        <div className="flex flex-wrap gap-1.5">
+          {missing.map(m => (
+            <span key={m.key} className="inline-flex items-center gap-1 rounded-full bg-white/70 px-2.5 py-0.5 text-xs font-medium text-gray-600 ring-1 ring-black/5">
+              <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 opacity-50"><path d="M12 5v14M5 12h14"/></svg>
+              {ui.items[m.key]}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ── Verification tab ──────────────────────────────────────────────────────────
 
 function VerificationTab({ profile, userId }: { profile: Profile | null; userId: string }) {
@@ -935,6 +1028,11 @@ export default function ProfileContent({
               <div>
                 <SectionTitle title="Profile" sub="Update your personal information and how you appear to others." />
 
+                <ProfileCompletenessBar
+                  name={name} bio={bio} rate={rate} cats={cats} avatar={avatar}
+                  location={location} phone={phone} role={role}
+                />
+
                 {/* Avatar row */}
                 <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5 mb-8">
                   <div className="relative">
@@ -1593,7 +1691,7 @@ export default function ProfileContent({
 
       {/* Mobile: section list slides in from the right */}
       {mobileSectionMenuOpen ? (
-        <div className="lg:hidden fixed inset-0 z-[70]" role="dialog" aria-modal="true" aria-labelledby="profile-section-menu-title">
+        <div className="lg:hidden fixed inset-0 z-70" role="dialog" aria-modal="true" aria-labelledby="profile-section-menu-title">
           <button
             type="button"
             className="absolute inset-0 bg-black/40"

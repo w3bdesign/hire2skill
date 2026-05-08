@@ -1,11 +1,11 @@
 ﻿'use client'
 
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { useLanguage } from '@/context/LanguageContext'
-import { Search, X, LayoutGrid, Map } from 'lucide-react'
+import { Search, X, LayoutGrid, Map, SlidersHorizontal, ChevronDown } from 'lucide-react'
 import { CATEGORY_BY_KEY, CATEGORY_LABEL_BY_KEY, CATEGORY_LABELS, toCategoryKey } from '@/lib/categories'
 import { categoryIconProps } from '@/lib/category-icon'
 import { helperCityKey } from '@/lib/helper-city-key'
@@ -176,7 +176,7 @@ function MapView({
       </div>
 
       {/* FINN-style top bar */}
-      <div className="pointer-events-none absolute left-0 right-0 top-0 z-[1700] flex flex-col items-center gap-2 px-3 pt-3 sm:pt-4">
+      <div className="pointer-events-none absolute left-0 right-0 top-0 z-1700 flex flex-col items-center gap-2 px-3 pt-3 sm:pt-4">
         <div
           className="pointer-events-auto flex w-full max-w-md items-center gap-2 rounded-full border border-gray-200/90 bg-white/95 px-4 py-2.5 shadow-md backdrop-blur-sm"
           style={{ boxShadow: '0 8px 30px rgba(15,23,42,0.08)' }}
@@ -192,13 +192,13 @@ function MapView({
       </div>
 
       {taskers.length === 0 && (
-        <div className="absolute inset-0 z-[1500] flex items-center justify-center bg-white/55 px-6 backdrop-blur-[1px]">
+        <div className="absolute inset-0 z-1500 flex items-center justify-center bg-white/55 px-6 backdrop-blur-[1px]">
           <p className="max-w-sm text-center text-sm font-semibold text-gray-700">{ui.mapNoHelpersOnMap}</p>
         </div>
       )}
 
       {preview && (
-        <div className="absolute bottom-3 left-3 right-3 z-[1800] rounded-2xl border border-gray-200/90 bg-white p-3.5 shadow-2xl sm:bottom-4 sm:left-4 sm:right-4 sm:p-4">
+        <div className="absolute bottom-3 left-3 right-3 z-1800 rounded-2xl border border-gray-200/90 bg-white p-3.5 shadow-2xl sm:bottom-4 sm:left-4 sm:right-4 sm:p-4">
           <div className="flex items-center gap-3">
             <div
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-bold text-white"
@@ -260,12 +260,12 @@ function MapView({
         </div>
       )}
 
-      <div className="absolute left-3 top-[4.5rem] z-[1600] max-w-[min(100%-1.5rem,280px)] rounded-xl border border-gray-200/90 bg-white/95 px-3 py-1.5 text-xs font-semibold text-gray-700 shadow-sm backdrop-blur-sm sm:top-[5.25rem]">
+      <div className="absolute left-3 top-18 z-1600 max-w-[min(100%-1.5rem,280px)] rounded-xl border border-gray-200/90 bg-white/95 px-3 py-1.5 text-xs font-semibold text-gray-700 shadow-sm backdrop-blur-sm sm:top-21">
         {ui.mapHelpersAcrossNorway(taskers.length)}
       </div>
 
       {taskers.length > 0 && !preview && (
-        <div className="pointer-events-none absolute bottom-3 left-3 right-3 z-[1650] flex justify-center pb-1 sm:bottom-4">
+        <div className="pointer-events-none absolute bottom-3 left-3 right-3 z-1650 flex justify-center pb-1 sm:bottom-4">
           <p className="rounded-full border border-sky-100 bg-sky-50/95 px-3 py-1.5 text-center text-[10px] font-medium text-sky-900 shadow-sm sm:text-[11px]">
             {ui.mapFooterHint}
           </p>
@@ -279,7 +279,7 @@ function Stars({ rating }: { rating: number }) {
   return (
     <span className="flex items-center gap-0.5">
       {[1, 2, 3, 4, 5].map(i => (
-        <svg key={i} width="11" height="11" viewBox="0 0 24 24" fill={i <= Math.round(rating) ? '#F59E0B' : '#E5E7EB'} className="sm:w-[13px] sm:h-[13px]">
+        <svg key={i} width="11" height="11" viewBox="0 0 24 24" fill={i <= Math.round(rating) ? '#F59E0B' : '#E5E7EB'} className="sm:w-3.25 sm:h-3.25">
           <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
         </svg>
       ))}
@@ -355,7 +355,7 @@ function TaskerCard({
             )}
             <span className="inline-flex shrink-0 items-center gap-0.5 text-[9px] sm:text-[10px] text-gray-400">
               <svg width="10" height="10" className="shrink-0 sm:w-2.5 sm:h-2.5" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              <span className="max-w-[4.5rem] truncate sm:max-w-[7rem]">{tasker.location}</span>
+              <span className="max-w-18 truncate sm:max-w-28">{tasker.location}</span>
             </span>
             <span className="inline-flex shrink-0 items-center gap-1 border-l border-gray-200 pl-1.5">
               <Stars rating={tasker.rating} />
@@ -365,7 +365,7 @@ function TaskerCard({
             </span>
           </div>
         </div>
-        <div className="text-right shrink-0 pl-1 min-w-[4.5rem] sm:min-w-[5.25rem] self-start pt-0 sm:pt-0.5">
+        <div className="text-right shrink-0 pl-1 min-w-18 sm:min-w-21 self-start pt-0 sm:pt-0.5">
           <p className="text-lg sm:text-xl font-extrabold text-gray-900 leading-none tabular-nums">{tasker.hourly_rate} NOK</p>
           <p className="text-[10px] sm:text-xs text-gray-400">{ui.perHour}</p>
         </div>
@@ -375,11 +375,11 @@ function TaskerCard({
 
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5 text-[11px] sm:text-xs text-gray-400 mb-2 rounded-lg sm:rounded-xl bg-gray-50 px-2 py-1.5 sm:py-2">
         <span className="flex items-center gap-1 shrink-0">
-          <svg width="12" height="12" className="sm:w-[13px] sm:h-[13px] shrink-0" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          <svg width="12" height="12" className="sm:w-3.25 sm:h-3.25 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
           {ui.tasksCount(tasker.tasks_done)}
         </span>
         <span className="flex items-center gap-1 shrink-0">
-          <svg width="12" height="12" className="sm:w-[13px] sm:h-[13px] shrink-0" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          <svg width="12" height="12" className="sm:w-3.25 sm:h-3.25 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
           {ui.responseWithinHours(tasker.response_hours)}
         </span>
         <div className="flex flex-wrap gap-1 w-full sm:w-auto sm:ml-auto sm:justify-end">
@@ -495,6 +495,23 @@ export default function TaskersContent({
     trustFastResponse: tt.trustFastResponse ?? 'Fast response',
     trustTopRated: tt.trustTopRated ?? 'Top rated',
     trustCompletedJobs: (count: number) => tt.trustCompletedJobs?.(count) ?? `${count} completed jobs`,
+    filterTitle: tt.filterTitle ?? 'Filters',
+    priceRange: tt.priceRange ?? 'Price (NOK/hr)',
+    minPricePlaceholder: tt.minPricePlaceholder ?? 'Min',
+    maxPricePlaceholder: tt.maxPricePlaceholder ?? 'Max',
+    minRatingLabel: tt.minRatingLabel ?? 'Min. rating',
+    filtersActive: (n: number) => tt.filtersActive?.(n) ?? `${n} filter${n === 1 ? '' : 's'}`,
+    bringTools: tt.bringTools ?? 'Brings tools',
+    canInvoice: tt.canInvoice ?? 'Can invoice',
+    sortLabel: tt.sortLabel ?? 'Sort:',
+    sortOptions: {
+      recommended: tt.sortOptions?.recommended ?? 'Recommended',
+      price_asc:   tt.sortOptions?.price_asc   ?? 'Price: Low → High',
+      price_desc:  tt.sortOptions?.price_desc  ?? 'Price: High → Low',
+      most_reviews: tt.sortOptions?.most_reviews ?? 'Most reviews',
+      top_rated:   tt.sortOptions?.top_rated   ?? 'Highest rated',
+    },
+    anyRating: tt.anyRating ?? 'Any rating',
   }
 
   const cityKeyNorm = citySlug?.toLowerCase() ?? ''
@@ -515,6 +532,27 @@ export default function TaskersContent({
   const [category, setCategory] = useState(activeCategory ?? 'All')
   const groupParam = searchParams.get('group')?.toLowerCase() ?? null
 
+  // Advanced filters
+  const [showFilters, setShowFilters] = useState(false)
+  const [priceMin, setPriceMin] = useState('')
+  const [priceMax, setPriceMax] = useState('')
+  const [minRating, setMinRating] = useState(0)
+  const [hoverRating, setHoverRating] = useState(0)
+  const [filterBringTools, setFilterBringTools] = useState(false)
+  const [filterCanInvoice, setFilterCanInvoice] = useState(false)
+  type SortKey = 'recommended' | 'price_asc' | 'price_desc' | 'most_reviews' | 'top_rated'
+  const [sortBy, setSortBy] = useState<SortKey>('recommended')
+  const [showSortDropdown, setShowSortDropdown] = useState(false)
+  const sortRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function onClickOutside(e: MouseEvent) {
+      if (sortRef.current && !sortRef.current.contains(e.target as Node)) setShowSortDropdown(false)
+    }
+    document.addEventListener('mousedown', onClickOutside)
+    return () => document.removeEventListener('mousedown', onClickOutside)
+  }, [])
+
   useEffect(() => {
     const id = setTimeout(() => setDebouncedQuery(query), 280)
     return () => clearTimeout(id)
@@ -527,7 +565,21 @@ export default function TaskersContent({
     }
   }, [posted])
 
-  const hasActiveFilters = !!(debouncedQuery || category !== 'All')
+  const priceMinNum = priceMin === '' ? null : Number(priceMin)
+  const priceMaxNum = priceMax === '' ? null : Number(priceMax)
+
+  const hasActiveFilters = !!(
+    debouncedQuery || category !== 'All' ||
+    priceMinNum !== null || priceMaxNum !== null ||
+    minRating > 0 || filterBringTools || filterCanInvoice
+  )
+
+  const activeAdvancedFilterCount = [
+    priceMinNum !== null || priceMaxNum !== null,
+    minRating > 0,
+    filterBringTools,
+    filterCanInvoice,
+  ].filter(Boolean).length
 
   const filtered = useMemo(() => {
     let list = [...taskers]
@@ -555,31 +607,56 @@ export default function TaskersContent({
       list = list.filter(t => t.categories.some(c => groupKeys.includes(toCategoryKey(c))))
     }
 
-    list.sort((a, b) => (b.rating * 20 + b.tasks_done) - (a.rating * 20 + a.tasks_done))
+    if (priceMinNum !== null) list = list.filter(t => t.hourly_rate >= priceMinNum)
+    if (priceMaxNum !== null) list = list.filter(t => t.hourly_rate <= priceMaxNum)
+    if (minRating > 0) list = list.filter(t => t.rating >= minRating)
+    if (filterBringTools) list = list.filter(t => t.brings_tools === true)
+    if (filterCanInvoice) list = list.filter(t => t.can_invoice === true)
+
+    switch (sortBy) {
+      case 'price_asc':   list.sort((a, b) => a.hourly_rate - b.hourly_rate); break
+      case 'price_desc':  list.sort((a, b) => b.hourly_rate - a.hourly_rate); break
+      case 'most_reviews': list.sort((a, b) => (b.review_count ?? 0) - (a.review_count ?? 0)); break
+      case 'top_rated':   list.sort((a, b) => b.rating - a.rating); break
+      default:            list.sort((a, b) => (b.rating * 20 + b.tasks_done) - (a.rating * 20 + a.tasks_done))
+    }
 
     return list
-  }, [taskers, citySlug, debouncedQuery, category, groupParam])
+  }, [taskers, citySlug, debouncedQuery, category, groupParam, priceMinNum, priceMaxNum, minRating, filterBringTools, filterCanInvoice, sortBy])
 
   const activeFilterChips = useMemo(() => {
-    const chips: Array<{ key: 'query' | 'category'; label: string }> = []
-    if (debouncedQuery.trim()) chips.push({ key: 'query', label: `Search: ${debouncedQuery.trim()}` })
-    if (category !== 'All') chips.push({ key: 'category', label: `Category: ${category}` })
+    const chips: Array<{ key: 'query' | 'category' | 'price' | 'rating' | 'tools' | 'invoice'; label: string }> = []
+    if (debouncedQuery.trim()) chips.push({ key: 'query', label: `"${debouncedQuery.trim()}"` })
+    if (category !== 'All') chips.push({ key: 'category', label: category })
+    if (priceMinNum !== null && priceMaxNum !== null) chips.push({ key: 'price', label: `${priceMinNum}–${priceMaxNum} NOK/hr` })
+    else if (priceMinNum !== null) chips.push({ key: 'price', label: `≥ ${priceMinNum} NOK/hr` })
+    else if (priceMaxNum !== null) chips.push({ key: 'price', label: `≤ ${priceMaxNum} NOK/hr` })
+    if (minRating > 0) chips.push({ key: 'rating', label: `${'★'.repeat(minRating)}${minRating < 5 ? '☆'.repeat(5 - minRating) : ''}` })
+    if (filterBringTools) chips.push({ key: 'tools', label: ui.bringTools })
+    if (filterCanInvoice) chips.push({ key: 'invoice', label: ui.canInvoice })
     return chips
-  }, [debouncedQuery, category])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedQuery, category, priceMinNum, priceMaxNum, minRating, filterBringTools, filterCanInvoice])
 
-  function removeChip(key: 'query' | 'category') {
-    if (key === 'query') {
-      setQuery('')
-      setDebouncedQuery('')
-      return
-    }
-    setCategory('All')
+  function removeChip(key: 'query' | 'category' | 'price' | 'rating' | 'tools' | 'invoice') {
+    if (key === 'query') { setQuery(''); setDebouncedQuery('') }
+    else if (key === 'category') setCategory('All')
+    else if (key === 'price') { setPriceMin(''); setPriceMax('') }
+    else if (key === 'rating') setMinRating(0)
+    else if (key === 'tools') setFilterBringTools(false)
+    else if (key === 'invoice') setFilterCanInvoice(false)
   }
 
   function clearAll() {
     setQuery('')
     setDebouncedQuery('')
     setCategory('All')
+    setPriceMin('')
+    setPriceMax('')
+    setMinRating(0)
+    setFilterBringTools(false)
+    setFilterCanInvoice(false)
+    setSortBy('recommended')
   }
 
   return (
@@ -600,7 +677,7 @@ export default function TaskersContent({
       {/* Header + Search */}
       <div className="bg-white border-b border-gray-200 px-4 py-6 sm:px-6 sm:py-8">
         <div className="mx-auto max-w-6xl">
-          <h1 className="text-2xl sm:text-[30px] leading-tight font-extrabold text-gray-900 mb-2">{pageTitle}</h1>
+          <h1 className="text-2xl sm:text-3xl leading-tight font-extrabold text-gray-900 mb-2">{pageTitle}</h1>
           <p className="text-gray-500 text-sm sm:text-[15px]">{pageSubtitle}</p>
           {citySlug && tt.cityLanding?.browseAllNorway && (
             <p className="mt-2">
@@ -627,6 +704,143 @@ export default function TaskersContent({
               </button>
             )}
           </div>
+
+          {/* Filter + Sort row */}
+          <div className="mt-4 flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setShowFilters(v => !v)}
+              className={`flex items-center gap-1.5 rounded-xl border px-3 py-2 text-sm font-semibold transition-colors ${
+                showFilters || activeAdvancedFilterCount > 0
+                  ? 'border-blue-400 bg-blue-50 text-blue-700'
+                  : 'border-gray-200 bg-white text-gray-600 hover:border-blue-300'
+              }`}
+            >
+              <SlidersHorizontal size={15} strokeWidth={2} />
+              {ui.filterTitle}
+              {activeAdvancedFilterCount > 0 && (
+                <span className="ml-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-blue-600 px-1 text-[10px] font-bold text-white">
+                  {activeAdvancedFilterCount}
+                </span>
+              )}
+            </button>
+
+            {/* Sort dropdown */}
+            <div ref={sortRef} className="relative ml-auto">
+              <button
+                type="button"
+                onClick={() => setShowSortDropdown(v => !v)}
+                className="flex items-center gap-1.5 rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-gray-600 hover:border-blue-300 transition-colors"
+              >
+                <span className="hidden sm:inline text-gray-400 font-normal">{ui.sortLabel}</span>
+                {ui.sortOptions[sortBy]}
+                <ChevronDown size={14} className={`transition-transform ${showSortDropdown ? 'rotate-180' : ''}`} />
+              </button>
+              {showSortDropdown && (
+                <div className="absolute right-0 top-full mt-1.5 z-30 min-w-44 rounded-xl border border-gray-200 bg-white shadow-lg py-1 overflow-hidden">
+                  {(Object.keys(ui.sortOptions) as SortKey[]).map(key => (
+                    <button
+                      key={key}
+                      type="button"
+                      onClick={() => { setSortBy(key); setShowSortDropdown(false) }}
+                      className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
+                        sortBy === key
+                          ? 'bg-blue-50 font-semibold text-blue-700'
+                          : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      {ui.sortOptions[key]}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Collapsible filter panel */}
+          {showFilters && (
+            <div className="mt-3 rounded-2xl border border-gray-200 bg-white shadow-sm p-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {/* Price range */}
+              <div>
+                <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">{ui.priceRange}</p>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    min={0}
+                    value={priceMin}
+                    onChange={e => setPriceMin(e.target.value)}
+                    placeholder={ui.minPricePlaceholder}
+                    className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition"
+                  />
+                  <span className="text-gray-400 shrink-0">–</span>
+                  <input
+                    type="number"
+                    min={0}
+                    value={priceMax}
+                    onChange={e => setPriceMax(e.target.value)}
+                    placeholder={ui.maxPricePlaceholder}
+                    className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition"
+                  />
+                </div>
+              </div>
+
+              {/* Minimum rating */}
+              <div>
+                <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">{ui.minRatingLabel}</p>
+                <div className="flex items-center gap-1">
+                  {[1, 2, 3, 4, 5].map(star => (
+                    <button
+                      key={star}
+                      type="button"
+                      onMouseEnter={() => setHoverRating(star)}
+                      onMouseLeave={() => setHoverRating(0)}
+                      onClick={() => setMinRating(minRating === star ? 0 : star)}
+                      className="transition-transform hover:scale-110"
+                      aria-label={`${star} star minimum`}
+                    >
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill={(hoverRating || minRating) >= star ? '#F59E0B' : '#E5E7EB'} className="transition-colors duration-100">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                      </svg>
+                    </button>
+                  ))}
+                  {minRating > 0 && (
+                    <button type="button" onClick={() => setMinRating(0)} className="ml-1 text-gray-400 hover:text-gray-600 text-xs">
+                      <X size={12} />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Boolean toggles */}
+              <div>
+                <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Options</p>
+                <div className="flex flex-col gap-2">
+                  {[
+                    { label: ui.bringTools, value: filterBringTools, set: setFilterBringTools },
+                    { label: ui.canInvoice, value: filterCanInvoice, set: setFilterCanInvoice },
+                  ].map(({ label, value, set }) => (
+                    <button
+                      key={label}
+                      type="button"
+                      onClick={() => set(!value)}
+                      className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-colors text-left ${
+                        value
+                          ? 'border-blue-400 bg-blue-50 text-blue-700'
+                          : 'border-gray-200 bg-white text-gray-600 hover:border-blue-200'
+                      }`}
+                    >
+                      <span className={`h-4 w-4 shrink-0 rounded border-2 flex items-center justify-center transition-colors ${
+                        value ? 'border-blue-600 bg-blue-600' : 'border-gray-300'
+                      }`}>
+                        {value && <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><polyline points="1,4 3,6 7,2" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                      </span>
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="mt-6 hidden sm:flex flex-wrap gap-6 text-sm text-gray-500">
             {[

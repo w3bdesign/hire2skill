@@ -12,9 +12,10 @@ import { Bell, LayoutDashboard, LogOut, Menu, MessageCircle, UserRound, X } from
 type Props = {
   userEmail: string | null
   unreadCount: number
+  isAdmin?: boolean
 }
 
-export default function MobileNavSheet({ userEmail, unreadCount }: Props) {
+export default function MobileNavSheet({ userEmail, unreadCount, isAdmin = false }: Props) {
   const { t } = useLanguage()
   const router = useRouter()
   const [open, setOpen] = useState(false)
@@ -55,7 +56,7 @@ export default function MobileNavSheet({ userEmail, unreadCount }: Props) {
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-[100] sm:hidden" role="dialog" aria-modal="true">
+        <div className="fixed inset-0 z-100 sm:hidden" role="dialog" aria-modal="true">
           <button
             type="button"
             className="absolute inset-0 bg-black/40"
@@ -103,7 +104,7 @@ export default function MobileNavSheet({ userEmail, unreadCount }: Props) {
                 <div className="relative shrink-0">
                   <MessageCircle className="h-5 w-5 text-blue-600" />
                   {unreadCount > 0 && (
-                    <span className="absolute -right-1.5 -top-1 min-w-[1rem] rounded-full bg-blue-600 px-1 py-px text-center text-[10px] font-bold leading-tight text-white">
+                    <span className="absolute -right-1.5 -top-1 min-w-4 rounded-full bg-blue-600 px-1 py-px text-center text-[10px] font-bold leading-tight text-white">
                       {unreadCount > 99 ? '99+' : unreadCount}
                     </span>
                   )}
@@ -126,6 +127,18 @@ export default function MobileNavSheet({ userEmail, unreadCount }: Props) {
                 <UserRound className="h-5 w-5 text-blue-600 shrink-0" />
                 {t.nav.profile}
               </Link>
+              {isAdmin && (
+                <Link
+                  href="/admin/verifications"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-amber-700 hover:bg-amber-50"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0" aria-hidden>
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  </svg>
+                  Admin
+                </Link>
+              )}
               <Link
                 href="/post"
                 onClick={() => setOpen(false)}
@@ -136,16 +149,22 @@ export default function MobileNavSheet({ userEmail, unreadCount }: Props) {
               </Link>
             </nav>
 
-            <div className="border-t border-gray-200 p-3 safe-area-inset-bottom">
-              <div className="mb-3 flex items-center justify-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2">
-                <ThemeToggle />
-                <LanguageSwitcher />
+            <div className="border-t border-gray-200 p-3 safe-area-inset-bottom space-y-2">
+              <p className="px-1 text-[11px] font-semibold uppercase tracking-wide text-gray-400">
+                {t.nav.preferences}
+              </p>
+              <div className="flex items-center justify-between rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5">
+                <span className="text-sm font-medium text-gray-600">{t.nav.chooseLanguage}</span>
+                <div className="flex items-center gap-2">
+                  <ThemeToggle />
+                  <LanguageSwitcher />
+                </div>
               </div>
               <button
                 type="button"
                 onClick={handleLogout}
                 disabled={loggingOut}
-                className="flex w-full items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-60"
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-semibold text-red-600 hover:bg-red-50 disabled:opacity-60"
               >
                 <LogOut className="h-4 w-4 shrink-0" />
                 {loggingOut ? (t.nav.loggingOut ?? 'Logging out…') : (t.nav.logout ?? 'Log out')}

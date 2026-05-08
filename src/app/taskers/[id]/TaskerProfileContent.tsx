@@ -398,7 +398,7 @@ export default function TaskerProfileContent({
 
                   <div className="min-w-0 flex-1 space-y-2">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h1 className="min-w-0 max-w-full text-lg font-extrabold text-gray-900 sm:text-2xl break-words">
+                      <h1 className="min-w-0 max-w-full text-lg font-extrabold text-gray-900 sm:text-2xl wrap-break-word">
                         {tasker.display_name}
                       </h1>
                       {isElite(tasker) && (
@@ -417,7 +417,7 @@ export default function TaskerProfileContent({
 
                     <div className="flex items-start gap-1.5 text-sm text-gray-500 min-w-0">
                       <svg width="14" height="14" className="mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                      <span className="min-w-0 break-words">{tasker.location}</span>
+                      <span className="min-w-0 wrap-break-word">{tasker.location}</span>
                     </div>
 
                     <div className="flex flex-wrap items-center gap-x-2 gap-y-1 min-w-0 max-w-full">
@@ -429,11 +429,11 @@ export default function TaskerProfileContent({
                     <div className="flex flex-wrap gap-x-4 gap-y-2">
                       <div className="flex min-w-0 items-center gap-1.5 text-sm text-gray-600">
                         <svg width="15" height="15" className="shrink-0" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-                        <span className="min-w-0 break-words">{ui.tasksDone(tasker.tasks_done)}</span>
+                        <span className="min-w-0 wrap-break-word">{ui.tasksDone(tasker.tasks_done)}</span>
                       </div>
                       <div className="flex min-w-0 items-center gap-1.5 text-sm text-gray-600">
                         <svg width="15" height="15" className="shrink-0" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                        <span className="min-w-0 break-words">{ui.repliesInHours(tasker.response_hours)}</span>
+                        <span className="min-w-0 wrap-break-word">{ui.repliesInHours(tasker.response_hours)}</span>
                       </div>
                     </div>
                   </div>
@@ -449,7 +449,7 @@ export default function TaskerProfileContent({
             {/* About */}
             <div className="bg-white rounded-2xl border border-gray-200 p-4 sm:p-8 max-w-full overflow-hidden">
               <h2 className="text-base font-extrabold text-gray-900 mb-4">{ui.about}</h2>
-              <p className="text-sm text-gray-600 leading-relaxed break-words">{tasker.bio}</p>
+              <p className="text-sm text-gray-600 leading-relaxed wrap-break-word">{tasker.bio}</p>
             </div>
 
             {/* Video intro */}
@@ -656,7 +656,7 @@ export default function TaskerProfileContent({
                       {s.icon}
                       <span className="min-w-0 truncate">{s.label}</span>
                     </div>
-                    <span className="max-w-[50%] shrink-0 text-right text-sm font-bold text-gray-900 break-words">{s.value}</span>
+                    <span className="max-w-[50%] shrink-0 text-right text-sm font-bold text-gray-900 wrap-break-word">{s.value}</span>
                   </div>
                 ))}
               </div>

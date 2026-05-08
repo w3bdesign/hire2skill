@@ -7,6 +7,12 @@ import { useLanguage } from '@/context/LanguageContext'
 
 const VAPID_PUBLIC_KEY = PUBLIC_ENV.NEXT_PUBLIC_VAPID_PUBLIC_KEY
 const SW_SEEN_KEY = 'h2s.sw.controllerSeen'
+const INSTALL_DISMISSED_KEY = 'h2s.pwa.installDismissed'
+
+interface BeforeInstallPromptEvent extends Event {
+  prompt(): Promise<void>
+  readonly userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
+}
 
 function urlBase64ToUint8Array(base64String: string) {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
@@ -33,11 +39,35 @@ export default function PWARegister() {
   const [showPrompt, setShowPrompt] = useState(false)
   const [dismissed, setDismissed] = useState(false)
   const [showUpdate, setShowUpdate] = useState(false)
+  const [showInstall, setShowInstall] = useState(false)
+  const installPromptRef = useRef<BeforeInstallPromptEvent | null>(null)
   const regRef = useRef<ServiceWorkerRegistration | null>(null)
 
   const checkForSwUpdate = useCallback(() => {
     const reg = regRef.current
     if (reg) void reg.update().catch(() => {})
+  }, [])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const alreadyDismissed = localStorage.getItem(INSTALL_DISMISSED_KEY)
+    if (alreadyDismissed) return
+
+    const onBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault()
+      installPromptRef.current = e as BeforeInstallPromptEvent
+      setShowInstall(true)
+    }
+    const onAppInstalled = () => {
+      setShowInstall(false)
+      installPromptRef.current = null
+    }
+    window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt)
+    window.addEventListener('appinstalled', onAppInstalled)
+    return () => {
+      window.removeEventListener('beforeinstallprompt', onBeforeInstallPrompt)
+      window.removeEventListener('appinstalled', onAppInstalled)
+    }
   }, [])
 
   useEffect(() => {
@@ -96,6 +126,23 @@ export default function PWARegister() {
     return () => subscription.unsubscribe()
   }, [])
 
+  async function handleInstall() {
+    const prompt = installPromptRef.current
+    if (!prompt) return
+    setShowInstall(false)
+    await prompt.prompt()
+    const { outcome } = await prompt.userChoice
+    if (outcome === 'dismissed') {
+      localStorage.setItem(INSTALL_DISMISSED_KEY, '1')
+    }
+    installPromptRef.current = null
+  }
+
+  function dismissInstall() {
+    localStorage.setItem(INSTALL_DISMISSED_KEY, '1')
+    setShowInstall(false)
+  }
+
   async function enableNotifications() {
     setShowPrompt(false)
     const reg = await navigator.serviceWorker.ready
@@ -109,10 +156,48 @@ export default function PWARegister() {
     } catch {}
   }
 
+  if (showInstall) {
+    return (
+      <div
+        className="fixed bottom-20 sm:bottom-6 left-4 right-4 sm:left-auto sm:right-6 sm:w-80 z-60
+                    bg-white border border-blue-200 rounded-2xl shadow-xl p-4 flex gap-3 items-start"
+        role="status"
+      >
+        <div
+          className="h-9 w-9 rounded-xl flex items-center justify-center shrink-0 text-lg"
+          style={{ background: 'linear-gradient(135deg,#1E3A8A,#38BDF8)' }}
+        >
+          📲
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="font-bold text-gray-900 text-sm">{P.installTitle}</p>
+          <p className="text-xs text-gray-500 mt-0.5">{P.installBody}</p>
+          <div className="flex gap-2 mt-3">
+            <button
+              type="button"
+              onClick={handleInstall}
+              className="rounded-lg px-3 py-1.5 text-xs font-bold text-white"
+              style={{ background: 'linear-gradient(135deg,#1E3A8A,#38BDF8)' }}
+            >
+              {P.installAdd}
+            </button>
+            <button
+              type="button"
+              onClick={dismissInstall}
+              className="rounded-lg px-3 py-1.5 text-xs font-semibold text-gray-500 border border-gray-200"
+            >
+              {P.installDismiss}
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   if (showUpdate) {
     return (
       <div
-        className="fixed bottom-20 sm:bottom-6 left-4 right-4 sm:left-auto sm:right-6 sm:w-80 z-[60]
+        className="fixed bottom-20 sm:bottom-6 left-4 right-4 sm:left-auto sm:right-6 sm:w-80 z-60
                     bg-white border border-blue-200 rounded-2xl shadow-xl p-4 flex gap-3 items-start"
         role="status"
       >
@@ -157,19 +242,19 @@ export default function PWARegister() {
         🔔
       </div>
       <div className="flex-1 min-w-0">
-        <p className="font-bold text-gray-900 text-sm">Stay in the loop</p>
-        <p className="text-xs text-gray-500 mt-0.5">Get notified about bookings and messages.</p>
+        <p className="font-bold text-gray-900 text-sm">{P.notifyTitle}</p>
+        <p className="text-xs text-gray-500 mt-0.5">{P.notifyBody}</p>
         <div className="flex gap-2 mt-3">
           <button
             onClick={enableNotifications}
             className="rounded-lg px-3 py-1.5 text-xs font-bold text-white"
             style={{ background: 'linear-gradient(135deg,#1E3A8A,#38BDF8)' }}>
-            Enable
+            {P.notifyEnable}
           </button>
           <button
             onClick={() => setDismissed(true)}
             className="rounded-lg px-3 py-1.5 text-xs font-semibold text-gray-500 border border-gray-200">
-            Not now
+            {P.notifyLater}
           </button>
         </div>
       </div>

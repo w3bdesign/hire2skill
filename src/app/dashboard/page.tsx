@@ -1,6 +1,13 @@
+import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import DashboardContent from './DashboardContent'
+
+export const metadata: Metadata = {
+  title: 'Dashboard',
+  description: 'Manage your bookings, tasks and messages on Hire2Skill.',
+  robots: { index: false, follow: false },
+}
 
 export type Post = {
   id: string

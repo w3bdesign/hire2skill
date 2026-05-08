@@ -1,6 +1,13 @@
+import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import ProfileContent from './ProfileContent'
+
+export const metadata: Metadata = {
+  title: 'My Profile',
+  description: 'View and edit your Hire2Skill profile — update your bio, skills, avatar and contact details.',
+  robots: { index: false, follow: false },
+}
 
 export default async function ProfilePage({
   searchParams,

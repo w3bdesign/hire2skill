@@ -1,6 +1,13 @@
+import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import ChatContent from './ChatContent'
+
+export const metadata: Metadata = {
+  title: 'Messages',
+  description: 'Chat with helpers and task posters on Hire2Skill.',
+  robots: { index: false, follow: false },
+}
 
 export type Conversation = {
   bookingId: string

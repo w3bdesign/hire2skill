@@ -210,7 +210,7 @@ export default function HomeContent({
               <p className="mt-3 text-xs font-medium text-amber-700 dark:text-amber-300">{h?.seasonalSummerBody ?? 'Need help now? Post a job in 30 seconds'}</p>
             </div>
 
-            <div className="relative h-56 overflow-hidden rounded-3xl md:h-full md:min-h-[320px]">
+            <div className="relative h-56 overflow-hidden rounded-3xl md:h-full md:min-h-80">
               <Image
                 src="/home/moving-furniture-apartment-4.png"
                 alt="People moving boxes"
@@ -249,7 +249,7 @@ export default function HomeContent({
                       sizes="(max-width: 1024px) 100vw, (max-width: 1280px) 50vw, 25vw"
                       className="object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
                     <div className="absolute left-3 top-3 rounded-full bg-orange-500 px-2 py-1 text-[10px] font-semibold text-white">
                       {job.urgent ? `🔥 ${h?.urgent ?? 'Urgent'}` : `🔥 ${h?.openTag ?? 'Open'}`}
                     </div>
@@ -323,7 +323,7 @@ export default function HomeContent({
                   sizes="(max-width: 1024px) 50vw, 20vw"
                   className="object-cover transition group-hover:scale-[1.03]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent" />
                 <span className="absolute bottom-2 left-2 text-sm font-bold text-white">{service.label}</span>
               </Link>
             ))}
@@ -382,7 +382,7 @@ export default function HomeContent({
           </Link>
         </section>
 
-        <section className="rounded-3xl bg-gradient-to-r from-blue-700 to-blue-500 p-5 text-white shadow-sm">
+        <section className="rounded-3xl bg-linear-to-r from-blue-700 to-blue-500 p-5 text-white shadow-sm">
           <h2 className="text-2xl font-extrabold">{h?.readyTitle ?? 'Ready to get started?'}</h2>
           <p className="mt-1 text-sm text-blue-100">{h?.readySub ?? 'Post a job and get help in minutes.'}</p>
           <div className="mt-4 flex flex-col gap-2 sm:flex-row">

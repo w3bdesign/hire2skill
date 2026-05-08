@@ -61,8 +61,8 @@ const FlagIcon: Record<Locale, FC<Svg>> = {
 function LocaleFlag({ locale, className }: { locale: Locale; className?: string }) {
   const Cmp = FlagIcon[locale]
   return (
-    <span className={`inline-flex shrink-0 overflow-hidden rounded-[2px] ring-1 ring-black/10 ${className ?? ''}`}>
-      <Cmp className="h-[0.875rem] w-[1.25rem] sm:h-4 sm:w-[1.35rem]" />
+    <span className={`inline-flex shrink-0 overflow-hidden rounded-xs ring-1 ring-black/10 ${className ?? ''}`}>
+      <Cmp className="h-3.5 w-5 sm:h-4 sm:w-[1.35rem]" />
     </span>
   )
 }
@@ -100,7 +100,7 @@ export default function LanguageSwitcher() {
 
       {open && (
         <div
-          className="absolute right-0 mt-1.5 min-w-[3.25rem] rounded-xl border border-gray-200 bg-white shadow-lg overflow-hidden z-[60] py-1"
+          className="absolute right-0 mt-1.5 min-w-13 rounded-xl border border-gray-200 bg-white shadow-lg overflow-hidden z-60 py-1"
           role="listbox"
           aria-label={n.chooseLanguage}
         >

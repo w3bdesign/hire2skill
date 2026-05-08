@@ -135,6 +135,7 @@ export default function AdminVerificationsContent({ submissions: init }: { submi
     await supabase.from('profiles').update({
       verification_status: status,
       verification_note: note ?? null,
+      verified: status === 'verified',
     }).eq('id', id)
     setItems(prev => prev.map(i => i.id === id ? { ...i, verification_status: status, verification_note: note ?? null } : i))
     setActiveId(null)
@@ -258,9 +259,9 @@ export default function AdminVerificationsContent({ submissions: init }: { submi
               <button onClick={() => setDocUrl(null)} className="text-gray-400 hover:text-gray-700 text-xl leading-none">×</button>
             </div>
             {docUrl.endsWith('.pdf') ? (
-              <iframe src={docUrl} className="w-full h-[500px]" />
+              <iframe src={docUrl} className="w-full h-125" />
             ) : (
-              <Image src={docUrl} alt="ID document" width={1200} height={900} className="w-full object-contain max-h-[500px]" />
+              <Image src={docUrl} alt="ID document" width={1200} height={900} className="w-full object-contain max-h-125" />
             )}
           </div>
         </div>

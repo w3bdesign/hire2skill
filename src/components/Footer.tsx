@@ -25,9 +25,9 @@ export default function Footer() {
           <div className="min-w-0">
             <p className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-1">{f.platform}</p>
             <ul className="flex flex-col gap-1">
-              <li><Link href="/jobs" className="text-gray-600 hover:text-blue-600 transition-colors break-words">{f.findJobs}</Link></li>
-              <li><Link href="/post" className="text-gray-600 hover:text-blue-600 transition-colors break-words">{f.postJob}</Link></li>
-              <li><Link href="/signup" className="text-gray-600 hover:text-blue-600 transition-colors break-words">{f.createAccount}</Link></li>
+              <li><Link href="/jobs" className="text-gray-600 hover:text-blue-600 transition-colors wrap-break-word">{f.findJobs}</Link></li>
+              <li><Link href="/post" className="text-gray-600 hover:text-blue-600 transition-colors wrap-break-word">{f.postJob}</Link></li>
+              <li><Link href="/signup" className="text-gray-600 hover:text-blue-600 transition-colors wrap-break-word">{f.createAccount}</Link></li>
             </ul>
             <p className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-gray-400 mt-2 mb-0.5">{f.citiesHeading}</p>
             <p className="text-gray-600 leading-snug text-[11px] sm:text-xs">
@@ -43,9 +43,9 @@ export default function Footer() {
           <div className="min-w-0">
             <p className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-1">{f.company}</p>
             <ul className="flex flex-col gap-1">
-              <li><Link href="/about" className="text-gray-600 hover:text-blue-600 transition-colors break-words">{f.about}</Link></li>
-              <li><Link href="/contact" className="text-gray-600 hover:text-blue-600 transition-colors break-words">{f.contact}</Link></li>
-              <li><Link href="/blog" className="text-gray-600 hover:text-blue-600 transition-colors break-words">{f.blog}</Link></li>
+              <li><Link href="/about" className="text-gray-600 hover:text-blue-600 transition-colors wrap-break-word">{f.about}</Link></li>
+              <li><Link href="/contact" className="text-gray-600 hover:text-blue-600 transition-colors wrap-break-word">{f.contact}</Link></li>
+              <li><Link href="/blog" className="text-gray-600 hover:text-blue-600 transition-colors wrap-break-word">{f.blog}</Link></li>
             </ul>
           </div>
 
@@ -53,10 +53,10 @@ export default function Footer() {
           <div className="col-span-2 lg:col-span-1 min-w-0">
             <p className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-1">{f.legal}</p>
             <ul className="grid grid-cols-2 gap-x-3 gap-y-1 lg:grid-cols-1 lg:gap-1.5">
-              <li><Link href="/personvern" className="text-gray-600 hover:text-blue-600 transition-colors break-words">{f.privacyLocal}</Link></li>
-              <li><Link href="/vilkar" className="text-gray-600 hover:text-blue-600 transition-colors break-words">{f.termsLocal}</Link></li>
-              <li><Link href="/privacy" className="text-gray-600 hover:text-blue-600 transition-colors break-words">{f.privacyEn}</Link></li>
-              <li><Link href="/terms" className="text-gray-600 hover:text-blue-600 transition-colors break-words">{f.termsEn}</Link></li>
+              <li><Link href="/personvern" className="text-gray-600 hover:text-blue-600 transition-colors wrap-break-word">{f.privacyLocal}</Link></li>
+              <li><Link href="/vilkar" className="text-gray-600 hover:text-blue-600 transition-colors wrap-break-word">{f.termsLocal}</Link></li>
+              <li><Link href="/privacy" className="text-gray-600 hover:text-blue-600 transition-colors wrap-break-word">{f.privacyEn}</Link></li>
+              <li><Link href="/terms" className="text-gray-600 hover:text-blue-600 transition-colors wrap-break-word">{f.termsEn}</Link></li>
             </ul>
           </div>
         </div>

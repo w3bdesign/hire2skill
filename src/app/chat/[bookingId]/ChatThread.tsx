@@ -366,7 +366,7 @@ export default function ChatThread({
         )}
 
         {displayMessages.length === 0 && !showPosterProposalCard && !showHelperPendingBanner && (
-          <div className="flex-1 flex items-center justify-center min-h-[120px]">
+          <div className="flex-1 flex items-center justify-center min-h-30">
             <p className="text-sm text-gray-400">{c.emptyThread}</p>
           </div>
         )}

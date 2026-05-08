@@ -51,14 +51,16 @@ function haversineKm(a: { lat: number; lon: number }, b: { lat: number; lon: num
   return 2 * R * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x))
 }
 
-function timeAgo(iso: string): string {
-  const diff = Date.now() - new Date(iso).getTime()
-  const mins = Math.floor(diff / 60000)
-  if (mins < 1) return 'just now'
-  if (mins < 60) return `${mins}m ago`
-  const hrs = Math.floor(mins / 60)
-  if (hrs < 24) return `${hrs}h ago`
-  return `${Math.floor(hrs / 24)}d ago`
+function makeTimeAgo(d: ReturnType<typeof useLanguage>['t']['dashboard']) {
+  return function timeAgo(iso: string): string {
+    const diff = Date.now() - new Date(iso).getTime()
+    const mins = Math.floor(diff / 60000)
+    if (mins < 1) return d.timeAgoJustNow
+    if (mins < 60) return d.timeAgoMin(mins)
+    const hrs = Math.floor(mins / 60)
+    if (hrs < 24) return d.timeAgoHour(hrs)
+    return d.timeAgoDay(Math.floor(hrs / 24))
+  }
 }
 
 function stripJobRefPrefix(text: string | null | undefined): string {
@@ -168,7 +170,7 @@ function ReviewModal({
     }
   }
 
-  const LABELS = ['', 'Poor', 'Fair', 'Good', 'Very good', 'Excellent']
+  const LABELS = ['', d.reviewStarPoor, d.reviewStarFair, d.reviewStarGood, d.reviewStarVeryGood, d.reviewStarExcellent]
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
@@ -187,7 +189,7 @@ function ReviewModal({
             <button onClick={() => { onDone(booking.id); onClose() }}
               className="w-full rounded-xl py-3 text-sm font-bold text-white hover:opacity-90"
               style={{ background: 'linear-gradient(90deg,#2563EB,#38BDF8)' }}>
-              Done
+              {d.actionDone}
             </button>
           </div>
         ) : (
@@ -258,6 +260,8 @@ function ReviewModal({
 }
 
 function PhotoUploadButton({ bookingId }: { bookingId: string }) {
+  const { t } = useLanguage()
+  const d = t.dashboard
   const [uploading, setUploading] = useState(false)
   const [photos, setPhotos] = useState<{ url: string; label: string }[]>([])
   const [showPicker, setShowPicker] = useState(false)
@@ -301,15 +305,15 @@ function PhotoUploadButton({ bookingId }: { bookingId: string }) {
 
       {showPicker ? (
         <div className="flex gap-2">
-          {(['before', 'after'] as const).map(t => (
-            <button key={t} type="button"
-              onClick={() => { setType(t); inputRef.current?.click() }}
+          {(['before', 'after'] as const).map(photoType => (
+            <button key={photoType} type="button"
+              onClick={() => { setType(photoType); inputRef.current?.click() }}
               disabled={uploading}
               className="flex-1 rounded-xl py-2 text-xs font-bold border capitalize transition-colors disabled:opacity-50"
-              style={type === t
-                ? { background: t === 'before' ? '#FFF7ED' : '#F0FDF4', borderColor: t === 'before' ? '#FED7AA' : '#BBF7D0', color: t === 'before' ? '#EA580C' : '#16A34A' }
+              style={type === photoType
+                ? { background: photoType === 'before' ? '#FFF7ED' : '#F0FDF4', borderColor: photoType === 'before' ? '#FED7AA' : '#BBF7D0', color: photoType === 'before' ? '#EA580C' : '#16A34A' }
                 : { background: '#F9FAFB', borderColor: '#E5E7EB', color: '#6B7280' }}>
-              {uploading && type === t ? 'Uploading…' : `+ ${t} photo`}
+              {uploading && type === photoType ? d.photoUploading : `+ ${photoType === 'before' ? d.photoBefore : d.photoAfter}`}
             </button>
           ))}
           <button type="button" onClick={() => setShowPicker(false)}
@@ -321,7 +325,7 @@ function PhotoUploadButton({ bookingId }: { bookingId: string }) {
         <button type="button" onClick={() => setShowPicker(true)}
           className="w-full rounded-xl py-2 text-xs font-semibold border border-gray-200 text-gray-500 hover:border-blue-300 hover:text-blue-600 transition-colors flex items-center justify-center gap-1.5">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          Add before/after photos
+          {d.photoAddLabel}
         </button>
       )}
     </div>
@@ -424,6 +428,7 @@ function BookingCard({
   const { t, locale } = useLanguage()
   const d = t.dashboard
   const c = t.chatPage
+  const timeAgo = makeTimeAgo(d)
   const [updating, setUpdating] = useState(false)
   const [notifyWarn, setNotifyWarn] = useState<string | null>(null)
   const meta = STATUS_META[booking.status] ?? STATUS_META.pending
@@ -852,7 +857,7 @@ export default function DashboardContent({ email, postCount, recentPosts, posted
             payload?.old?.status !== 'accepted' &&
             payload?.new?.status === 'accepted'
           ) {
-            setIncomingRequestToast('Your proposal was accepted.')
+            setIncomingRequestToast(d.proposalAcceptedRealtime)
           }
           if (
             role === 'helper' &&
@@ -868,7 +873,7 @@ export default function DashboardContent({ email, postCount, recentPosts, posted
             payload?.old?.status !== 'cancelled' &&
             payload?.new?.status === 'cancelled'
           ) {
-            setIncomingRequestToast('This job was cancelled by the poster.')
+            setIncomingRequestToast(d.taskCancelledRealtime)
           }
           if (
             role === 'poster' &&

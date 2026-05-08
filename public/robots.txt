@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+Allow: /taskers/
+Allow: /taskers/*
+Allow: /post
+
+Disallow: /dashboard
+Disallow: /dashboard/
+Disallow: /chat
+Disallow: /chat/
+Disallow: /profile
+Disallow: /profile/
+Disallow: /notifications
+Disallow: /notifications/
+Disallow: /admin
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: https://hire2skill.com/sitemap.xml
