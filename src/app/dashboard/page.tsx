@@ -64,10 +64,24 @@ export default async function DashboardPage({
     supabase.from('posts').select('*', { count: 'exact', head: true }).eq('user_id', user.id),
     supabase.from('posts').select('id, title, category, location, status, created_at')
       .eq('user_id', user.id).order('created_at', { ascending: false }).limit(30),
-    supabase.from('profiles').select('role').eq('id', user.id).single(),
+    supabase.from('profiles')
+      .select('role, display_name, bio, hourly_rate, categories, avatar_url, location, phone')
+      .eq('id', user.id).single(),
   ])
 
   const role = (profile?.role ?? null) as 'helper' | 'poster' | null
+
+  // Compute incomplete helper profile fields to show a dashboard nudge
+  const profileMissing: string[] = []
+  if (role === 'helper') {
+    if (!profile?.display_name?.trim()) profileMissing.push('name')
+    if (!profile?.avatar_url) profileMissing.push('avatar')
+    if (!(profile?.bio ?? '').trim() || (profile?.bio ?? '').trim().length < 30) profileMissing.push('bio')
+    if (!profile?.hourly_rate || profile.hourly_rate <= 0) profileMissing.push('rate')
+    if (!(profile?.categories ?? []).length) profileMissing.push('categories')
+    if (!profile?.location?.trim()) profileMissing.push('location')
+    if (!profile?.phone?.trim()) profileMissing.push('phone')
+  }
 
   let bookings: BookingItem[] = []
 
@@ -214,6 +228,7 @@ export default async function DashboardPage({
       bookings={bookings}
       pendingCount={pendingCount}
       currentUserId={user.id}
+      profileMissing={profileMissing}
     />
   )
 }

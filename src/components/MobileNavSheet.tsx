@@ -22,8 +22,10 @@ export default function MobileNavSheet({ userEmail, unreadCount, isAdmin = false
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [loggingOut, setLoggingOut] = useState(false)
-  const [installPrompt, setInstallPrompt] = useState<WinWithPwa['__h2sPwaPrompt'] | null>(null)
-  // Lazy init — detected once at mount, never changes during component lifetime
+  // All three lazy-initialized — avoids calling setState synchronously inside useEffect
+  const [installPrompt, setInstallPrompt] = useState<WinWithPwa['__h2sPwaPrompt'] | null>(() =>
+    typeof window !== 'undefined' ? ((window as WinWithPwa).__h2sPwaPrompt ?? null) : null
+  )
   const [isIos] = useState(() =>
     typeof window !== 'undefined' &&
     /iphone|ipad|ipod/i.test(navigator.userAgent) &&
@@ -47,10 +49,7 @@ export default function MobileNavSheet({ userEmail, unreadCount, isAdmin = false
   }, [open])
 
   useEffect(() => {
-    // Pick up prompt if PWARegister already captured it before this mounted
-    const existing = (window as WinWithPwa).__h2sPwaPrompt
-    if (existing) setInstallPrompt(existing)
-
+    // Only event listeners here — no synchronous setState calls
     const onInstallable = () => {
       const p = (window as WinWithPwa).__h2sPwaPrompt
       if (p) setInstallPrompt(p)

@@ -21,6 +21,7 @@ type Props = {
   bookings: BookingItem[]
   pendingCount: number
   currentUserId: string
+  profileMissing: string[]
 }
 
 const STATUS_META: Record<string, { bg: string; color: string }> = {
