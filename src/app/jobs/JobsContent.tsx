@@ -976,7 +976,7 @@ export default function JobsContent({
                 setPage(1)
                 setMapEmbedFailed(false)
               }}
-              className={`min-w-[8.5rem] rounded-xl px-3 py-2 text-xs font-semibold transition md:min-w-0 md:w-full ${
+              className={`min-w-34 rounded-xl px-3 py-2 text-xs font-semibold transition md:min-w-0 md:w-full ${
                 quickCategory === chip ? 'bg-blue-600 text-white' : 'border border-gray-200 bg-white text-gray-700 hover:border-blue-300'
               }`}
             >
@@ -1084,7 +1084,7 @@ export default function JobsContent({
             </div>
           ) : viewMode === 'map' ? (
             <div className="grid gap-3 rounded-2xl border border-gray-200 bg-white p-3 lg:grid-cols-[320px_1fr]">
-              <div className="max-h-[520px] space-y-2 overflow-y-auto pr-1">
+              <div className="max-h-130 space-y-2 overflow-y-auto pr-1">
                 {pagedJobs.map((job) => {
                   const selected = activeMapJob?.id === job.id
                   return (
@@ -1110,7 +1110,7 @@ export default function JobsContent({
               </div>
               <div className="overflow-hidden rounded-xl border border-gray-200">
                 {isMobileViewport ? (
-                  <div className="flex h-[520px] flex-col items-center justify-center gap-3 bg-gray-50 px-4 text-center">
+                  <div className="flex h-130 flex-col items-center justify-center gap-3 bg-gray-50 px-4 text-center">
                     <p className="text-sm font-semibold text-gray-700">Open location in your maps app</p>
                     <p className="text-xs text-gray-500">
                       {activeMapJob?.location ?? 'Oslo, Norway'}
@@ -1127,7 +1127,7 @@ export default function JobsContent({
                     </a>
                   </div>
                 ) : mapEmbedFailed ? (
-                  <div className="flex h-[520px] flex-col items-center justify-center gap-3 bg-gray-50 px-4 text-center">
+                  <div className="flex h-130 flex-col items-center justify-center gap-3 bg-gray-50 px-4 text-center">
                     <p className="text-sm font-semibold text-gray-700">Map preview is unavailable on this device.</p>
                     <a
                       href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
@@ -1147,7 +1147,7 @@ export default function JobsContent({
                     src={`https://maps.google.com/maps?q=${encodeURIComponent(
                       activeMapJob?.location ?? 'Oslo, Norway',
                     )}&t=&z=13&ie=UTF8&iwloc=&output=embed`}
-                    className="h-[520px] w-full"
+                    className="h-130 w-full"
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
                     onError={() => setMapEmbedFailed(true)}
@@ -1257,7 +1257,7 @@ export default function JobsContent({
         </section>
       </div>
       {showMobileFilters && (
-        <div className="fixed inset-0 z-[70] lg:hidden" role="dialog" aria-modal="true">
+        <div className="fixed inset-0 z-70 lg:hidden" role="dialog" aria-modal="true">
           <button type="button" className="absolute inset-0 bg-black/40" onClick={() => setShowMobileFilters(false)} aria-label="Close filters" />
           <aside className="absolute left-0 top-0 h-full w-[min(20rem,88vw)] overflow-y-auto border-r border-gray-200 bg-white p-4 shadow-xl">
             <div className="mb-3 flex items-center justify-between">

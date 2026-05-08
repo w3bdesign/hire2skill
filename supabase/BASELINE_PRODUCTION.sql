@@ -1,5 +1,8 @@
 -- Hire2Skill production baseline (idempotent)
 -- Run in Supabase SQL Editor for new environments.
+-- NOTE: Run migration 016_core_tables_if_missing.sql FIRST if setting up a brand-new database.
+-- The ALTER TABLE statements below add columns that migration 016 does not include
+-- (they were added incrementally after the initial schema was created).
 
 BEGIN;
 
@@ -95,10 +98,17 @@ COMMENT ON COLUMN public.profiles.longitude IS 'WGS84 longitude; set when locati
 -- RLS for profiles
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "profiles_select_helpers_public" ON public.profiles;
 DROP POLICY IF EXISTS "profiles_select_own" ON public.profiles;
 DROP POLICY IF EXISTS "profiles_insert_own" ON public.profiles;
 DROP POLICY IF EXISTS "profiles_update_own" ON public.profiles;
 
+-- Public read for helper profiles (powers the /taskers listing for all visitors)
+CREATE POLICY "profiles_select_helpers_public"
+  ON public.profiles FOR SELECT
+  USING (role = 'helper' AND deleted_at IS NULL);
+
+-- Each user can always read their own profile regardless of role
 CREATE POLICY "profiles_select_own"
   ON public.profiles FOR SELECT
   USING (auth.uid() = id);

@@ -1158,7 +1158,7 @@ export default function PostForm() {
                 All categories ({CATEGORIES.length})
               </button>
               <p className="mb-3 text-xs font-bold uppercase tracking-wide text-gray-500">All categories</p>
-              <div className="max-h-[420px] space-y-2 overflow-y-auto pr-1">
+              <div className="max-h-105 space-y-2 overflow-y-auto pr-1">
                 {CATEGORIES.map((cat) => (
                   <button
                     key={cat.key}

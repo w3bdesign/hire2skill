@@ -51,16 +51,20 @@ export default function PWARegister() {
   useEffect(() => {
     if (typeof window === 'undefined') return
     const alreadyDismissed = localStorage.getItem(INSTALL_DISMISSED_KEY)
-    if (alreadyDismissed) return
 
     const onBeforeInstallPrompt = (e: Event) => {
       e.preventDefault()
       installPromptRef.current = e as BeforeInstallPromptEvent
-      setShowInstall(true)
+      // Expose globally so MobileNavSheet can trigger install from the menu
+      ;(window as Window & { __h2sPwaPrompt?: Event }).__h2sPwaPrompt = e
+      window.dispatchEvent(new CustomEvent('pwa:installable'))
+      if (!alreadyDismissed) setShowInstall(true)
     }
     const onAppInstalled = () => {
       setShowInstall(false)
       installPromptRef.current = null
+      ;(window as Window & { __h2sPwaPrompt?: Event }).__h2sPwaPrompt = undefined
+      window.dispatchEvent(new CustomEvent('pwa:installed'))
     }
     window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt)
     window.addEventListener('appinstalled', onAppInstalled)
