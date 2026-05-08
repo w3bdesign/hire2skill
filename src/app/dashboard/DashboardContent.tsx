@@ -719,6 +719,7 @@ export default function DashboardContent({ email, postCount, recentPosts, posted
   const [distanceByLocation, setDistanceByLocation] = useState<Record<string, number>>({})
   const [incomingRequestToast, setIncomingRequestToast] = useState<string | null>(null)
   const [cancelPostBusyId, setCancelPostBusyId] = useState<string | null>(null)
+  const [postStatusBusyId, setPostStatusBusyId] = useState<string | null>(null)
 
   function handleTabChange(tab: 'overview' | 'tasks') {
     setActiveTab(tab)
@@ -761,6 +762,21 @@ export default function DashboardContent({ email, postCount, recentPosts, posted
       .eq('post_id', postId)
       .in('status', ['pending', 'accepted'])
     setPosts((prev) => prev.filter((p) => p.id !== postId))
+  }
+
+  async function updatePostStatus(postId: string, status: 'closed' | 'open') {
+    if (postStatusBusyId) return
+    setPostStatusBusyId(postId)
+    const { error } = await createClient()
+      .from('posts')
+      .update({ status })
+      .eq('id', postId)
+      .eq('user_id', currentUserId)
+    setPostStatusBusyId(null)
+    if (!error) {
+      setPosts(prev => prev.map(p => p.id === postId ? { ...p, status } : p))
+      void fetch('/api/cache/invalidate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key: 'jobs:open' }) })
+    }
   }
 
   const requestCount = bookings.filter((b) => bookingKind(b) === 'request').length
@@ -1093,29 +1109,44 @@ export default function DashboardContent({ email, postCount, recentPosts, posted
             </div>
             {posts.length > 0 ? (
               <div className="flex flex-col gap-3">
-                {posts.slice(0, 5).map(post => (
-                  <div key={post.id} className="flex items-center justify-between rounded-xl bg-white border border-gray-200 px-5 py-4">
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">{post.title}</p>
-                      <p className="text-xs text-gray-400 mt-0.5">{post.location} · {post.category}</p>
+                {posts.slice(0, 5).map(post => {
+                  const statusMeta = POST_STATUS_META[post.status] ?? POST_STATUS_META.open
+                  const isBusy = cancelPostBusyId === post.id || postStatusBusyId === post.id
+                  return (
+                    <div key={post.id} className="flex items-center justify-between rounded-xl bg-white border border-gray-200 px-5 py-4 gap-3">
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-gray-900 truncate">{post.title}</p>
+                        <p className="text-xs text-gray-400 mt-0.5">{post.location} · {post.category}</p>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className="rounded-full px-2 py-0.5 text-[10px] font-bold" style={{ background: statusMeta.bg, color: statusMeta.color }}>
+                          {post.status ?? 'open'}
+                        </span>
+                        {post.status === 'open' && (
+                          <Link href={`/jobs/${post.id}`} className="text-xs font-medium text-blue-600 hover:underline">View</Link>
+                        )}
+                        {post.status === 'open' && (
+                          <button type="button" disabled={isBusy} onClick={() => void updatePostStatus(post.id, 'closed')}
+                            className="text-xs font-semibold text-gray-600 hover:text-gray-800 disabled:opacity-50">
+                            {postStatusBusyId === post.id ? '…' : 'Mark filled'}
+                          </button>
+                        )}
+                        {post.status === 'closed' && (
+                          <button type="button" disabled={isBusy} onClick={() => void updatePostStatus(post.id, 'open')}
+                            className="text-xs font-semibold text-blue-600 hover:text-blue-800 disabled:opacity-50">
+                            {postStatusBusyId === post.id ? '…' : 'Reopen'}
+                          </button>
+                        )}
+                        {post.status === 'open' && (
+                          <button type="button" disabled={isBusy} onClick={() => void cancelPostedTask(post.id)}
+                            className="text-xs font-semibold text-red-600 hover:text-red-700 disabled:opacity-50">
+                            {cancelPostBusyId === post.id ? (d.actionCancelling ?? '…') : d.actionCancelTask}
+                          </button>
+                        )}
+                      </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <span className="text-xs text-gray-400">
-                        {formatDateByLocale(post.created_at, locale, { day: 'numeric', month: 'short' })}
-                      </span>
-                      {post.status === 'open' && (
-                        <button
-                          type="button"
-                          onClick={() => void cancelPostedTask(post.id)}
-                          disabled={cancelPostBusyId === post.id}
-                          className="text-xs font-semibold text-red-600 hover:text-red-700 disabled:opacity-50"
-                        >
-                          {cancelPostBusyId === post.id ? (d.actionCancelling ?? 'Cancelling…') : d.actionCancelTask}
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             ) : (
               <div className="rounded-xl border border-dashed border-gray-300 bg-white p-8 text-center">
@@ -1225,20 +1256,42 @@ export default function DashboardContent({ email, postCount, recentPosts, posted
                         <span className="text-xs text-gray-400">
                           {formatDateByLocale(post.created_at, locale, { day: 'numeric', month: 'short' })}
                         </span>
-                        <Link
-                          href={`/taskers?category=${encodeURIComponent(post.category)}`}
-                          className="rounded-lg px-3 py-1.5 text-xs font-semibold text-white whitespace-nowrap hover:opacity-90 transition-opacity"
-                          style={{ background: 'linear-gradient(90deg,#2563EB,#38BDF8)' }}>
-                          {d.findHelper}
-                        </Link>
+                        {post.status === 'open' && (
+                          <Link href={`/jobs/${post.id}`}
+                            className="rounded-lg px-3 py-1.5 text-xs font-semibold text-gray-600 border border-gray-200 whitespace-nowrap hover:bg-gray-50 transition-colors">
+                            View
+                          </Link>
+                        )}
+                        {post.status === 'open' && (
+                          <Link
+                            href={`/taskers?category=${encodeURIComponent(post.category)}`}
+                            className="rounded-lg px-3 py-1.5 text-xs font-semibold text-white whitespace-nowrap hover:opacity-90 transition-opacity"
+                            style={{ background: 'linear-gradient(90deg,#2563EB,#38BDF8)' }}>
+                            {d.findHelper}
+                          </Link>
+                        )}
+                        {post.status === 'open' && (
+                          <button type="button" disabled={postStatusBusyId === post.id || cancelPostBusyId === post.id}
+                            onClick={() => void updatePostStatus(post.id, 'closed')}
+                            className="rounded-lg px-3 py-1.5 text-xs font-semibold text-gray-700 border border-gray-200 whitespace-nowrap hover:bg-gray-50 disabled:opacity-50">
+                            {postStatusBusyId === post.id ? '…' : 'Mark as Filled'}
+                          </button>
+                        )}
+                        {post.status === 'closed' && (
+                          <button type="button" disabled={postStatusBusyId === post.id}
+                            onClick={() => void updatePostStatus(post.id, 'open')}
+                            className="rounded-lg px-3 py-1.5 text-xs font-semibold text-blue-600 border border-blue-200 whitespace-nowrap hover:bg-blue-50 disabled:opacity-50">
+                            {postStatusBusyId === post.id ? '…' : 'Reopen'}
+                          </button>
+                        )}
                         {post.status === 'open' && (
                           <button
                             type="button"
                             onClick={() => void cancelPostedTask(post.id)}
-                            disabled={cancelPostBusyId === post.id}
+                            disabled={cancelPostBusyId === post.id || postStatusBusyId === post.id}
                             className="rounded-lg px-3 py-1.5 text-xs font-semibold text-red-600 border border-red-200 whitespace-nowrap hover:bg-red-50 disabled:opacity-50"
                           >
-                            {cancelPostBusyId === post.id ? (d.actionCancelling ?? 'Cancelling…') : d.actionCancelTask}
+                            {cancelPostBusyId === post.id ? (d.actionCancelling ?? '…') : d.actionCancelTask}
                           </button>
                         )}
                       </div>
