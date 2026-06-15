@@ -1,15 +1,15 @@
 import ContactForm from './ContactForm'
 
 export const metadata = {
-  title: 'Contact Us',
-  description: 'Get in touch with the Hire2Skill team. We\'re here to help with any questions about bookings, accounts, or your experience on the platform.',
+  title: 'Kontakt oss',
+  description: 'Ta kontakt med Hire2Skill-teamet. Vi er her for å hjelpe med spørsmål om bestillinger, kontoer eller din opplevelse på plattformen.',
 }
 
 const FAQ = [
-  { q: 'How do I cancel a booking?', a: 'Go to your Dashboard, find the booking, and click Cancel. Cancellation policies are set per-helper — check before booking.' },
-  { q: 'How do I report a problem with a helper?', a: 'Use the Contact form and select "Report a problem". Our trust & safety team responds within 24 hours.' },
-  { q: 'How do I reset my password?', a: 'On the login page, click "Forgot password" and we\'ll send a reset link to your email.' },
-  { q: 'When do I get paid as a helper?', a: 'Payments are released within 48 hours of a task being marked complete. Check your Account Balance in Settings.' },
+  { q: 'Hvordan avbestiller jeg en booking?', a: 'Gå til Dashboard, finn bookingen og klikk Avbestill. Avbestillingsregler settes per hjelper — sjekk før booking.' },
+  { q: 'Hvordan rapporterer jeg et problem med en hjelper?', a: 'Bruk kontaktskjemaet og velg "Rapporter et problem". Vårt trygghetsteam svarer innen 24 timer.' },
+  { q: 'Hvordan tilbakestiller jeg passordet mitt?', a: 'På innloggingssiden, klikk "Glemt passord" så sender vi en tilbakestillingslenke til e-posten din.' },
+  { q: 'Når får jeg utbetalt som hjelper?', a: 'Utbetalinger frigis innen 48 timer etter at et oppdrag er markert som fullført. Sjekk kontobalansen din i Innstillinger.' },
 ]
 
 export default function ContactPage() {
@@ -19,9 +19,9 @@ export default function ContactPage() {
       {/* Hero */}
       <div className="bg-white border-b border-gray-100">
         <div className="mx-auto max-w-4xl px-6 py-14">
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-3">Get in touch</h1>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-3">Ta kontakt</h1>
           <p className="text-gray-500 text-lg max-w-xl">
-            We usually reply within a few hours on business days. For urgent help, include your booking ID.
+            Vi svarer vanligvis innen noen timer på hverdager. For akutt hjelp, inkluder booking-ID.
           </p>
         </div>
       </div>
@@ -36,27 +36,27 @@ export default function ContactPage() {
 
           {/* Contact details */}
           <div className="bg-white rounded-2xl border border-gray-200 p-6">
-            <h2 className="font-bold text-gray-900 mb-4">Other ways to reach us</h2>
+            <h2 className="font-bold text-gray-900 mb-4">Andre måter å nå oss på</h2>
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <span className="text-xl">📧</span>
                 <div>
-                  <p className="text-sm font-semibold text-gray-700">Email</p>
+                  <p className="text-sm font-semibold text-gray-700">E-post</p>
                   <p className="text-sm text-gray-500">support@hire2skill.com</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <span className="text-xl">⏱️</span>
                 <div>
-                  <p className="text-sm font-semibold text-gray-700">Response time</p>
-                  <p className="text-sm text-gray-500">Mon–Fri, usually within 4 hours</p>
+                  <p className="text-sm font-semibold text-gray-700">Svartid</p>
+                  <p className="text-sm text-gray-500">Man–Fre, vanligvis innen 4 timer</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <span className="text-xl">📍</span>
                 <div>
-                  <p className="text-sm font-semibold text-gray-700">Registered address</p>
-                  <p className="text-sm text-gray-500">Hire2Skill AS, Oslo, Norway</p>
+                  <p className="text-sm font-semibold text-gray-700">Registrert adresse</p>
+                  <p className="text-sm text-gray-500">Hire2Skill AS, Oslo, Norge</p>
                 </div>
               </div>
             </div>
@@ -64,7 +64,7 @@ export default function ContactPage() {
 
           {/* Common questions */}
           <div>
-            <h2 className="font-bold text-gray-900 mb-4">Common questions</h2>
+            <h2 className="font-bold text-gray-900 mb-4">Vanlige spørsmål</h2>
             <div className="space-y-3">
               {FAQ.map(f => (
                 <div key={f.q} className="bg-white rounded-xl border border-gray-200 p-4">
