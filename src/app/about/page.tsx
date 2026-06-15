@@ -4,15 +4,15 @@ import IconBadge from '@/components/IconBadge'
 import type { IconBadgeTone } from '@/components/IconBadge'
 
 export const metadata = {
-  title: 'About Hire2Skill',
-  description: 'Hire2Skill connects people with trusted local helpers across Norway. Learn about our mission, story, and values.',
+  title: 'Om Hire2Skill',
+  description: 'Hire2Skill kobler folk med pålitelige lokale hjelpere over hele Norge. Lær om vår misjon, historie og verdier.',
 }
 
 const STATS = [
-  { value: '10,000+', label: 'Tasks completed' },
-  { value: '2,500+', label: 'Verified helpers' },
-  { value: '50+', label: 'Cities in Norway' },
-  { value: '4.8 ★', label: 'Average rating' },
+  { value: '10 000+', label: 'Oppdrag fullført' },
+  { value: '2 500+', label: 'Verifiserte hjelpere' },
+  { value: '50+', label: 'Byer i Norge' },
+  { value: '4,8 ★', label: 'Gjennomsnittlig vurdering' },
 ]
 
 const VALUES: Array<{
@@ -26,29 +26,29 @@ const VALUES: Array<{
     Icon: ShieldCheck,
     iconColor: '#1D4ED8',
     tone: 'blue',
-    title: 'Trust first',
-    desc: 'Every helper is ID-verified before they can accept bookings. Ratings and reviews are real — posted only by people who completed a task.',
+    title: 'Trygghet først',
+    desc: 'Alle hjelpere er ID-verifisert før de kan akseptere bestillinger. Vurderinger og anmeldelser er ekte — postet bare av folk som har fullført et oppdrag.',
   },
   {
     Icon: Bolt,
     iconColor: '#D97706',
     tone: 'amber',
-    title: 'Fast and easy',
-    desc: 'Post a task in under two minutes. Get matched with available helpers the same day. No endless back-and-forth.',
+    title: 'Raskt og enkelt',
+    desc: 'Legg ut et oppdrag på under to minutter. Bli matchet med tilgjengelige hjelpere samme dag. Ingen endeløs frem og tilbake.',
   },
   {
     Icon: Handshake,
     iconColor: '#059669',
     tone: 'emerald',
-    title: 'Fair for everyone',
-    desc: 'Helpers keep the majority of what they earn. Posters pay transparent prices with no hidden fees.',
+    title: 'Rettferdig for alle',
+    desc: 'Hjelpere beholder mesteparten av det de tjener. Oppdragsgivere betaler transparente priser uten skjulte avgifter.',
   },
   {
     Icon: Globe2,
     iconColor: '#0891B2',
     tone: 'cyan',
-    title: 'Local, always',
-    desc: 'We only operate in Norway. Our helpers live in your city and understand your community.',
+    title: 'Lokalt, alltid',
+    desc: 'Vi opererer kun i Norge. Våre hjelpere bor i din by og forstår ditt lokalsamfunn.',
   },
 ]
 
@@ -60,11 +60,11 @@ export default function AboutPage() {
       <div className="text-white" style={{ background: 'linear-gradient(135deg,#1E3A8A,#38BDF8)' }}>
         <div className="mx-auto max-w-4xl px-6 py-20 text-center">
           <h1 className="text-4xl sm:text-5xl font-extrabold mb-5 leading-tight">
-            Norway&apos;s trusted platform<br />for local help
+            Norges pålitelige plattform<br />for lokal hjelp
           </h1>
           <p className="text-lg opacity-90 max-w-2xl mx-auto">
-            Hire2Skill makes it easy to find skilled, verified helpers for any task — from cleaning and moving
-            to tutoring and tech support. We&apos;re building a more connected Norway, one task at a time.
+            Hire2Skill gjør det enkelt å finne dyktige, verifiserte hjelpere for alle typer oppdrag — fra rengjøring og flytting
+            til undervisning og teknisk støtte. Vi bygger et mer sammenknyttet Norge, ett oppdrag av gangen.
           </p>
         </div>
       </div>
@@ -83,23 +83,23 @@ export default function AboutPage() {
 
       {/* Story */}
       <div className="mx-auto max-w-3xl px-6 py-16">
-        <h2 className="text-2xl font-extrabold text-gray-900 mb-5">Our story</h2>
+        <h2 className="text-2xl font-extrabold text-gray-900 mb-5">Vår historie</h2>
         <div className="prose prose-gray max-w-none text-gray-600 leading-relaxed space-y-4">
           <p>
-            Hire2Skill started with a simple observation: finding reliable help for everyday tasks was
-            surprisingly hard. Whether it was a leaky tap, a piece of furniture that needed assembling,
-            or a maths tutor for a struggling student — people were left searching through Facebook groups
-            and word-of-mouth recommendations, never quite sure who to trust.
+            Hire2Skill startet med en enkel observasjon: å finne pålitelig hjelp til dagligdagse oppgaver var
+            overraskende vanskelig. Enten det var en lekkende kran, et møbel som skulle monteres,
+            eller en mattelærer til en slitende elev — folk ble stående igjen med å søke gjennom Facebook-grupper
+            og jungeltelegrafen, aldri helt sikre på hvem de kunne stole på.
           </p>
           <p>
-            We built Hire2Skill to change that. Our platform makes it simple to post any task, browse
-            verified local helpers, read honest reviews, and book with confidence — all in a few minutes.
+            Vi bygde Hire2Skill for å endre på det. Vår plattform gjør det enkelt å legge ut ethvert oppdrag, bla gjennom
+            verifiserte lokale hjelpere, lese ærlige anmeldelser og bestille med trygghet — alt på få minutter.
           </p>
           <p>
-            Today, Hire2Skill operates across Norway, connecting thousands of people with skilled helpers
-            every week. We&apos;re proud that helpers on our platform earn fair rates for their expertise,
-            and that the people who use our service can get on with their lives knowing the job is in
-            good hands.
+            I dag opererer Hire2Skill over hele Norge, og kobler tusenvis av mennesker med dyktige hjelpere
+            hver uke. Vi er stolte av at hjelperne på vår plattform tjener rettferdige priser for sin ekspertise,
+            og at folk som bruker tjenesten vår kan komme videre med livene sine i visshet om at jobben er i
+            gode hender.
           </p>
         </div>
       </div>
@@ -107,7 +107,7 @@ export default function AboutPage() {
       {/* Values */}
       <div className="bg-gray-50 py-16">
         <div className="mx-auto max-w-4xl px-6">
-          <h2 className="text-2xl font-extrabold text-gray-900 mb-10 text-center">What we stand for</h2>
+          <h2 className="text-2xl font-extrabold text-gray-900 mb-10 text-center">Det vi står for</h2>
           <div className="grid sm:grid-cols-2 gap-6">
             {VALUES.map(v => (
               <div key={v.title} className="bg-white rounded-2xl border border-gray-200 p-6">
@@ -124,17 +124,17 @@ export default function AboutPage() {
 
       {/* CTA */}
       <div className="mx-auto max-w-3xl px-6 py-16 text-center">
-        <h2 className="text-2xl font-extrabold text-gray-900 mb-3">Ready to get started?</h2>
-        <p className="text-gray-500 mb-8">Post your first task free, or create a helper profile and start earning today.</p>
+        <h2 className="text-2xl font-extrabold text-gray-900 mb-3">Klar til å komme i gang?</h2>
+        <p className="text-gray-500 mb-8">Legg ut ditt første oppdrag gratis, eller opprett en hjelperprofil og begynn å tjene i dag.</p>
         <div className="flex flex-wrap justify-center gap-4">
           <Link href="/post"
             className="rounded-xl px-7 py-3 font-bold text-sm text-white"
             style={{ background: 'linear-gradient(135deg,#1E3A8A,#38BDF8)' }}>
-            Post a Task
+            Legg ut oppdrag
           </Link>
           <Link href="/signup"
             className="rounded-xl px-7 py-3 font-bold text-sm text-gray-700 border border-gray-200 hover:border-blue-300 transition-colors">
-            Become a Helper
+            Bli hjelper
           </Link>
         </div>
       </div>
